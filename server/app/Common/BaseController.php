@@ -388,6 +388,17 @@ abstract class BaseController
             return null;
         }
 
+        // 检查 token 是否已过期（与 McpController::verifyUserToken 的过期检查逻辑一致）
+        // token_expire 为 0 视为永久有效；大于 0 且小于当前时间则已过期
+        $tokenExpire = (int) ($tokenRow['token_expire'] ?? 0);
+        if ($tokenExpire > 0 && $tokenExpire < time()) {
+            if ($strictOnError) {
+                return $this->error($response, 10102, 'Token 无效或已过期');
+            }
+            $uid = 0;
+            return null;
+        }
+
         $uid = $parsedUid;
         return null;
     }
