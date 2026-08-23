@@ -788,47 +788,49 @@ const handlePaste = async (e: ClipboardEvent) => {
   const clipboard = e.clipboardData
   if (!clipboard) return
 
+  // 优先检查是否有图片（避免 text/html 排在 image 前面时被提前拦截）
+  let imageItem: DataTransferItem | null = null
   for (let i = 0; i < clipboard.items.length; i++) {
-    const item = clipboard.items[i]
-
-    // 如果是图片 - 让编辑器的上传功能处理
-    if (item.type.indexOf('image') > -1) {
-      e.preventDefault()
-      const imageFile = item.getAsFile()
-      // 使用组件引用，确保能正确调用
-      if (imageFile && editormdEditorRef.value) {
-        // 使用编辑器的上传功能
-        try {
-          const url = await uploadFile(imageFile)
-          editormdEditorRef.value.insertValue(`![${imageFile.name}](${url})`)
-          editormdEditorRef.value.focus()
-        } catch (error) {
-          console.error('粘贴上传图片失败:', error)
-        }
-      }
-      return
+    if (clipboard.items[i].type.indexOf('image') > -1) {
+      imageItem = clipboard.items[i]
+      break
     }
+  }
 
-    // 如果是HTML
-    if (item.type === 'text/html') {
+  // 如果有图片，优先走上传流程
+  if (imageItem) {
+    e.preventDefault()
+    const imageFile = imageItem.getAsFile()
+    if (imageFile && editormdEditorRef.value) {
+      try {
+        const url = await uploadFile(imageFile)
+        editormdEditorRef.value.insertValue(`![${imageFile.name}](${url})`)
+        editormdEditorRef.value.focus()
+      } catch (error) {
+        handleUploadError(error as Error)
+      }
+    }
+    return
+  }
+
+  // 非图片，检查 HTML 内容
+  for (let i = 0; i < clipboard.items.length; i++) {
+    if (clipboard.items[i].type === 'text/html') {
       e.preventDefault()
 
-      // 使用 Promise 包装 getAsString
       const htmlData = await new Promise<string>((resolve) => {
-        item.getAsString(resolve)
+        clipboard.items[i].getAsString(resolve)
       })
 
-      // 使用DOM方式提取纯文本（更准确，能正确处理换行、空白等）
       const pastebin = document.querySelector('#pastebin') as HTMLElement
       if (pastebin) {
         pastebin.innerHTML = htmlData
         const text = pastebin.innerText || pastebin.textContent || ''
-        pastebin.innerHTML = '' // 清空，避免影响下次使用
+        pastebin.innerHTML = ''
 
         if (text.length < 200) {
           insertAtCursor(text)
         } else {
-          // 使用公共弹窗组件询问用户是否转Markdown
           const convertToMarkdown = await ConfirmModal({
             msg: t('page.paste_html_tips'),
             confirmText: t('page.past_html_markdown'),
@@ -836,7 +838,6 @@ const handlePaste = async (e: ClipboardEvent) => {
           })
 
           if (convertToMarkdown) {
-            // 简单的HTML转Markdown（这里使用基础转换）
             const markdown = htmlToMarkdown(htmlData)
             insertAtCursor(markdown)
           } else {
@@ -844,7 +845,6 @@ const handlePaste = async (e: ClipboardEvent) => {
           }
         }
       } else {
-        // 如果pastebin不存在，降级使用正则方式
         const text = htmlData.replace(/<[^>]+>/g, '')
         if (text.length < 200) {
           insertAtCursor(text)
