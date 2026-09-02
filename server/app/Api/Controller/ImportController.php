@@ -52,8 +52,14 @@ class ImportController extends BaseController
         $file = $uploadedFiles['file'];
         $filename = $file->getClientFilename();
 
-        // 检查文件扩展名（只允许 .zip 或 .json 文件）
+        // 检查文件扩展名（只允许 .zip 或 .json 文件，Office 文档单独分发）
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        // Office 文档导入（doc/docx/ppt/pptx/xls/xlsx/pdf）
+        if (isset(\App\Common\Helper\OfficeImporter::SUPPORTED[$ext])) {
+            return $this->officeImport($request, $response, $uid, $itemId);
+        }
+
         if (!in_array($ext, ['zip', 'json'], true)) {
             return $this->error($response, 10101, '只支持上传 ZIP 或 JSON 格式的文件');
         }
@@ -159,6 +165,48 @@ class ImportController extends BaseController
         }
 
         return $this->error($response, 10101, '不支持的文件格式');
+    }
+
+    /**
+     * Office 文档导入内部分发（由 auto() 调用，权限/登录已在 auto 校验）。
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param int $uid
+     * @param int $itemId
+     * @return Response
+     */
+    private function officeImport(Request $request, Response $response, int $uid, int $itemId): Response
+    {
+        // 转换 20s + 图片逐张附件上传（本地/OSS 存储慢时每张秒级），给足余量
+        set_time_limit(300);
+        ini_set('memory_limit', '600M');
+
+        $user = [];
+        if ($error = $this->requireLoginUser($request, $response, $user)) {
+            return $error;
+        }
+
+        // 拆页参数，默认 heading
+        $split = (string) $this->getParam($request, 'split', 'heading');
+
+        $uploadedFiles = $request->getUploadedFiles();
+
+        $result = \App\Common\Helper\OfficeImporter::import(
+            $uploadedFiles,
+            $uid,
+            (string) ($user['username'] ?? ''),
+            $itemId,
+            $split
+        );
+
+        if ($result['error_code'] !== 0) {
+            return $this->error($response, $result['error_code'], $result['error_message'], 200, [
+                'data' => $result['data'],
+            ]);
+        }
+
+        return $this->success($response, $result['data']);
     }
 
     /**

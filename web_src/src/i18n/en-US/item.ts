@@ -124,8 +124,20 @@ export default {
   op_member: 'Member',
   op_attachment: 'Attachment',
   import_file: 'Import File',
-  import_file_tips1: 'Imported files can be JSON file of postman, JSON file of swagger3, and markdown zip of ShowDoc. The system will automatically identify the file type.',
-  import_file_tips2: 'Drag files here, or <em>click to upload</em>',
+  import_file_tips1:
+    'Supported formats (auto-detected):<br/>• <b>Postman</b> json<br/>• <b>Swagger3</b> json<br/>• ShowDoc <b>markdown zip</b><br/>• <b>Word</b>: doc / docx<br/>• <b>Excel</b>: xls / xlsx<br/>• <b>PPT</b>: ppt / pptx<br/>• <b>PDF</b>: text-based only',
+  import_file_tips2: 'Drag file here, or <em>click to upload</em>',
+  import_file_tips1_office:
+    'Office/PDF documents can be split into multiple pages: Word by headings, Excel by worksheets, PPT by slides.',
+  import_split_mode: 'Choose how to split pages:',
+  import_split_heading: 'Split by headings (one page per heading)',
+  import_split_sheet: 'Split by worksheets (one page per worksheet)',
+  import_split_slide: 'Split by slides (one page per slide)',
+  import_split_none: 'No splitting (whole document as one page)',
+  import_begin: 'Start Import',
+  import_file_too_large: 'File exceeds the size limit (max {size})',
+  import_file_unsupported:
+    'Unsupported file format. Supported: zip/json, or doc/docx/ppt/pptx/xls/xlsx/pdf',
   import_into_cur_item: 'Import into current item',
   import_into_cur_item_tips: 'When you choose to import into the current item, pages with the same title in the same catalog will be overwritten',
   import_into_new_item: 'Import as a new item',

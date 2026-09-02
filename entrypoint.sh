@@ -53,6 +53,11 @@ docker_build() {
     (
         echo "client_max_body_size 5120m;"
     ) >/opt/docker/etc/nginx/vhost.common.d/10-general.conf
+    (
+        # 禁止访问 server/bin（anydoc 二进制；镜像内已 COPY 到 /usr/local/bin，
+        # 此处兑底 rsync 把 server/ 整包拷进 web 根后防二进制被匿名下载）
+        echo "location ^~ /server/bin/ { deny all; }"
+    ) >/opt/docker/etc/nginx/vhost.common.d/20-deny-serverbin.conf
 
     ## fix nginx warning
     sed -i -e '1 s/^/#/' /opt/docker/etc/nginx/vhost.ssl.conf

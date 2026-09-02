@@ -27,12 +27,18 @@ ENV TARGETVARIANT=${TARGETVARIANT}
 WORKDIR /showdoc_data/html
 COPY . .
 
+# ---------- Office 导入转换器 anydoc（musl 静态，见 server/bin/VERSION） ----------
+# 注意：.dockerignore 已排除 server/bin/*（防二进制被整包拷进 web 根），
+# 但用 !server/bin/anydoc 反排除了本文件，所以这里仍可 COPY
+COPY --chmod=755 server/bin/anydoc /usr/local/bin/anydoc
+
 # 旧版基础镜像（wordpress:*，如 arm/v7）：代码需放入 apache 网站根目录 /var/www/html，
 # 并提供 PHP 渲染 web/index.html 的入口，同时放宽权限以兼容历史行为。
 # 注意：RUN 默认 /bin/sh（POSIX），须用 case 而非 [[ ]]
 RUN case "$BASE_IMAGE" in \
         wordpress:*) \
             cp -R /showdoc_data/html/. /var/www/html/ && \
+            rm -f /var/www/html/server/bin/anydoc && \
             echo "<?php echo file_get_contents('index.html'); ?>" > /var/www/html/web/index.php && \
             chmod -R 777 /var/www/html/ \
         ;; \

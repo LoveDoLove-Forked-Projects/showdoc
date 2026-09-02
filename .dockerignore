@@ -4,6 +4,10 @@
 Dockerfile*
 docker-compose.yml
 showdocdata/
+server/tests/
+server/bin/*
+!server/bin/anydoc
+!server/bin/VERSION
 
 .git/
 Application/Runtime/

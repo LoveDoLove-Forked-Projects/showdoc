@@ -1,0 +1,28 @@
+anydoc 转换二进制
+==================
+
+- 文件: anydoc
+- 版本: v0.2.4（上游 firecrawl/anydoc 的 Rust 核心 crate）
+- 协议: MIT
+- 来源: 自编译。薄 CLI 入口（等价官方 examples/convert.rs）调用
+  anydoc::to_markdown_bytes + Format::from_bytes，musl 静态链接
+  （x86_64-unknown-linux-musl，static-pie，strip），无运行时依赖。
+- 用途: ShowDoc Office 文档导入（doc/docx/ppt/pptx/xls/xlsx/文本型 pdf），
+  由 server 端 AnydocHelper 调用，将文档转 GFM Markdown。
+
+用法（由 AnydocHelper 封装，一般无需直接调用）:
+
+    anydoc <file>            # Markdown 输出到 stdout
+
+退出码:
+    0 成功
+    1 文件读取/解析/转换失败
+    2 参数错误
+    3 （保留）PDF 需要 OCR —— 本二进制不含 OCR，扫描件直接转换失败
+
+部署:
+    生产 Dockerfile: COPY server/bin/anydoc /usr/local/bin/anydoc 并 chmod +x
+    php-dev 开发容器: docker cp server/bin/anydoc showdoc-dev:/usr/local/bin/anydoc
+
+升级替换: 覆盖本文件即可；重新编译需克隆 firecrawl/anydoc（v0.2.4）并按
+  musl release profile 构建（lto=fat, codegen-units=1, panic=abort, opt-level=z, strip=symbols）。

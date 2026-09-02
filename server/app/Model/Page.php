@@ -321,17 +321,19 @@ class Page
             }
         }
 
+        $table = self::tableForItem($itemId);
+
+        // 统一标题口径为存量库口径（htmlspecialchars 后形态）：查找与写入用同一形态，
+        // 否则含特殊字符（& < > " '）的标题重复导入时匹配不上 → 重复建页
+        $pageTitle = htmlspecialchars(htmlspecialchars_decode($pageTitle));
+
         // 查找是否已存在该页面
-        $existing = DB::table('page')
+        $existing = DB::table($table)
             ->where('item_id', $itemId)
             ->where('is_del', 0)
             ->where('cat_id', $catId)
             ->where('page_title', $pageTitle)
             ->first();
-
-        // HTML 转义处理（与旧版逻辑一致：_htmlspecialchars）
-        // 之所以先 htmlspecialchars_decode 是为了防止被 htmlspecialchars 转义了两次
-        $pageTitle = htmlspecialchars(htmlspecialchars_decode($pageTitle));
 
         // 开源版：page_content 不压缩存储
         // 如果传入的是压缩数据（旧数据），先解压（兼容旧数据）
@@ -363,13 +365,13 @@ class Page
                 ->where('page_id', $pageId)
                 ->where('item_id', $itemId)
                 ->update($updateData);
-            if ($affected > 0) {
-                // 删除缓存
-                self::deleteCache($pageId);
-                \App\Model\Item::deleteCache($itemId);
-                return $pageId;
-            }
-            return false;
+            // affected=0 不代表失败：内容完全相同的重复导入在 MySQL 默认模式下
+            // affected_rows 为 0（值未变），此时仍是成功覆盖，必须返回 pageId，
+            // 否则调用方会误判失败走新建分支 → 重复建页
+            // 删除缓存
+            self::deleteCache($pageId);
+            \App\Model\Item::deleteCache($itemId);
+            return $pageId;
         } else {
             // 创建新页面
             // 开源版：直接保存，不压缩

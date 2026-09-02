@@ -577,7 +577,21 @@ class Item
                         's_number'         => (int) ($value['s_number'] ?? 99),
                         'page_comments'    => htmlspecialchars(htmlspecialchars_decode($value['page_comments'] ?? '')),
                     ];
-                    $newPageId = Page::addPage($itemId, $pageData);
+                    $pageContent = $value['page_content'] ?? '';
+                    // 一级页面也按标题覆盖（与目录内页面同口径）：重复导入同一项目时
+                    // 不再重复建页；全新标题仍走新建
+                    $newPageId = Page::updateByTitle(
+                        $itemId,
+                        (string) ($value['page_title'] ?? ''),
+                        $pageContent,
+                        '',
+                        (int) ($value['s_number'] ?? 99),
+                        $uid,
+                        $user->username ?? ''
+                    );
+                    if (!$newPageId) {
+                        $newPageId = Page::addPage($itemId, $pageData);
+                    }
                     $oldPageId = (int) ($value['page_id'] ?? 0);
                     if ($oldPageId > 0 && $newPageId > 0) {
                         $pageIdMap[$oldPageId] = $newPageId;
