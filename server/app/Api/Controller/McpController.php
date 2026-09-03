@@ -60,7 +60,7 @@ class McpController extends BaseController
     }
 
     // 解析 JSON
-    $jsonRequest = json_decode($body, true);
+    $jsonRequest = json_decode($body, true, 512, JSON_BIGINT_AS_STRING);
 
     if (json_last_error() !== JSON_ERROR_NONE) {
       return $this->jsonResponse($response, McpError::createResponse(

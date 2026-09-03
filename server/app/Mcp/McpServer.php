@@ -115,7 +115,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
         ],
@@ -155,7 +155,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'item_name' => [
@@ -179,7 +179,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
         ],
@@ -196,7 +196,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
         ],
@@ -228,7 +228,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'cat_name' => [
@@ -297,7 +297,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'cat_id' => [
@@ -325,11 +325,11 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID（与page_title配合使用）',
           ],
           'page_title' => [
@@ -353,7 +353,7 @@ class McpServer
         'properties' => [
           'page_ids' => [
             'type' => 'array',
-            'items' => ['type' => 'integer'],
+            'items' => ['type' => 'string'],
             'description' => '页面ID数组（最多10个）',
           ],
         ],
@@ -373,7 +373,7 @@ class McpServer
             'description' => '搜索关键字',
           ],
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID（可选，限定搜索范围）',
           ],
           'search_mode' => [
@@ -435,7 +435,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'page_title' => [
@@ -471,7 +471,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'comment_content' => [
@@ -491,7 +491,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'page_content' => [
@@ -527,7 +527,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'diffs' => [
@@ -577,7 +577,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'page_title' => [
@@ -613,7 +613,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'pages' => [
@@ -644,7 +644,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
         ],
@@ -661,7 +661,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'limit' => [
@@ -681,7 +681,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'version_id' => [
@@ -701,7 +701,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'version_id_1' => [
@@ -725,7 +725,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'version_id' => [
@@ -746,7 +746,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'expire_days' => [
@@ -766,7 +766,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
         ],
@@ -782,7 +782,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
         ],
@@ -799,11 +799,11 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID（可选）',
           ],
           'file_base64' => [
@@ -827,11 +827,11 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID（可选，用于筛选特定页面的附件）',
           ],
         ],
@@ -868,7 +868,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID（可选，不传则创建新项目）',
           ],
           'openapi_content' => [
@@ -897,7 +897,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
         ],
@@ -913,7 +913,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
         ],
@@ -929,7 +929,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '任务ID（即任务的page_id，可通过 kanban_get_board 或 kanban_list_tasks 获取）',
           ],
         ],
@@ -945,7 +945,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'list_id' => [
@@ -993,7 +993,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'query' => [
@@ -1013,7 +1013,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'list_id' => [
@@ -1072,7 +1072,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '任务页面ID',
           ],
           'title' => [
@@ -1139,7 +1139,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '任务页面ID',
           ],
           'target_list_id' => [
@@ -1159,7 +1159,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '任务页面ID',
           ],
         ],
@@ -1175,7 +1175,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'title' => [
@@ -1195,7 +1195,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'list_id' => [
@@ -1219,7 +1219,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'list_id' => [
@@ -1239,7 +1239,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'list_id' => [
@@ -1259,7 +1259,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'list_id' => [
@@ -1279,7 +1279,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
         ],
@@ -1295,7 +1295,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID',
           ],
           'event_types' => [
@@ -1333,11 +1333,11 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID（与page_title配合使用）',
           ],
           'page_title' => [
@@ -1356,7 +1356,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID（item_type必须为3）',
           ],
           'page_title' => [
@@ -1392,7 +1392,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'page_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '页面ID',
           ],
           'page_title' => [
@@ -1428,7 +1428,7 @@ class McpServer
         'type' => 'object',
         'properties' => [
           'item_id' => [
-            'type' => 'integer',
+            'type' => 'string',
             'description' => '项目ID（item_type必须为3）',
           ],
           'page_title' => [
