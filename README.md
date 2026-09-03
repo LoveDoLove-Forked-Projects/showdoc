@@ -1,6 +1,6 @@
 ﻿# ShowDoc
 
-## [Click here for the Chinese tutorial](https://www.showdoc.com.cn/help)
+## [中文教程](https://www.showdoc.com.cn/help)
 
 ### What is ShowDoc?
 
