@@ -16,7 +16,7 @@ class Upgrade
      * 当前数据库版本号
      * 注意：如果更新数据库结构，务必更改此版本号
      */
-    private const CURRENT_VERSION = 33;
+    private const CURRENT_VERSION = 34;
 
     /**
      * 检查并执行数据库升级
@@ -750,6 +750,16 @@ class Upgrade
                 `created_at` int(11) NOT NULL DEFAULT '0'
             )");
             DB::statement("CREATE INDEX IF NOT EXISTS idx_ai_message_session ON ai_chat_messages (session_id, id)");
+
+            // 创建user_ai_memory表（AI Agent 用户长期记忆）
+            DB::statement("CREATE TABLE IF NOT EXISTS `user_ai_memory` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+                `uid` int(11) NOT NULL DEFAULT '0',
+                `content` text,
+                `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+            )");
+            DB::statement("CREATE UNIQUE INDEX IF NOT EXISTS idx_user_ai_memory_uid_content ON user_ai_memory (uid, content)");
 
             // users表增加is_sso字段，标记通过SSO(OAuth2/LDAP/CAS/SecretKey)登录的用户
             if (!self::isColumnExist('user', 'is_sso')) {

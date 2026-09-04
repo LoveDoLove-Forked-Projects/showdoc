@@ -903,6 +903,7 @@ class AgentController extends BaseController
             'page_title'      => $pageTitle,
             'editor_content'  => $editorContent,
             'is_guest'        => $isGuest,
+            'uid'             => $isGuest ? 0 : $uid,
             'can_edit'        => $canEdit,
             'role'            => $role,
             'item_type'       => $itemType,

@@ -9,6 +9,7 @@ use App\Mcp\Handler\AttachmentHandler;
 use App\Mcp\Handler\OpenApiHandler;
 use App\Mcp\Handler\KanbanHandler;
 use App\Mcp\Handler\RunapiPageHandler;
+use App\Mcp\Handler\MemoryHandler;
 use App\Model\UserAiToken;
 use App\Common\Helper\IpHelper;
 
@@ -858,6 +859,74 @@ class McpServer
         'required' => [],
       ],
       'handler' => 'attachment',
+    ];
+
+    // 用户记忆（AI Agent 长期记忆，仅已登录用户；游客在 Agent 层不注册、Handler 层强制 uid>0 兜底）
+    $this->tools['memory_read'] = [
+      'name' => 'memory_read',
+      'description' => '读取当前用户的长期记忆（偏好/习惯/事实）。AI 助手的记忆在每次对话时已自动注入，一般无需主动调用；仅在用户明确要求查看记忆时调用。',
+      'inputSchema' => [
+        'type' => 'object',
+        'properties' => (object) [],
+        'required' => [],
+      ],
+      'handler' => 'memory',
+      'level' => 'read',
+    ];
+
+    $this->tools['memory_add'] = [
+      'name' => 'memory_add',
+      'description' => '追加一条新的长期记忆（append）。同一内容不会重复存储（完全一致则提示已存在）。每用户最多50条，满时自动淘汰最旧一条。单条最多1000字。适用于：用户表达了偏好/模板/习惯（如周报模板）、用户纠正了你的行为（如“不要用表格”）、长期有效的事实。写入成功后必须用一句话告知用户记住了什么。',
+      'inputSchema' => [
+        'type' => 'object',
+        'properties' => [
+          'content' => [
+            'type' => 'string',
+            'description' => '记忆内容（简洁完整，单条最多1000字）',
+          ],
+        ],
+        'required' => ['content'],
+      ],
+      'handler' => 'memory',
+      'level' => 'write',
+    ];
+
+    $this->tools['memory_update'] = [
+      'name' => 'memory_update',
+      'description' => '按 memory_id 覆盖更新某一条记忆的内容（只改这一条，不影响其他条目）。仅当用户明确要求修改某条已有记忆时使用；日常新增记忆用 memory_add，不要混用。',
+      'inputSchema' => [
+        'type' => 'object',
+        'properties' => [
+          'memory_id' => [
+            'type' => 'integer',
+            'description' => '记忆ID（从 memory_read 结果获取）',
+          ],
+          'content' => [
+            'type' => 'string',
+            'description' => '新的记忆内容（单条最多1000字）',
+          ],
+        ],
+        'required' => ['memory_id', 'content'],
+      ],
+      'handler' => 'memory',
+      'level' => 'write',
+    ];
+
+    $this->tools['memory_delete'] = [
+      'name' => 'memory_delete',
+      'description' => '按 memory_id 删除当前用户的一条长期记忆。用户要求“忘掉/删除某条记忆”时调用；修改某条记忆用 memory_update，不要用删除后重加的方式。',
+      'inputSchema' => [
+        'type' => 'object',
+        'properties' => [
+          'memory_id' => [
+            'type' => 'integer',
+            'description' => '记忆ID（从 memory_read 结果获取）',
+          ],
+        ],
+        'required' => ['memory_id'],
+      ],
+      'handler' => 'memory',
+      'level' => 'write',
     ];
 
     // OpenAPI 导入
@@ -2290,6 +2359,9 @@ class McpServer
           break;
         case 'runapi_page':
           $this->handlers[$name] = new RunapiPageHandler();
+          break;
+        case 'memory':
+          $this->handlers[$name] = new MemoryHandler();
           break;
         default:
           throw new \RuntimeException("Handler 不存在: {$name}");
