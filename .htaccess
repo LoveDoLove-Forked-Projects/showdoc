@@ -2,6 +2,9 @@
   Options +FollowSymlinks
   RewriteEngine On
 
+  # 禁止访问 SQLite 数据库目录（防 .db.php 被 PHP 解析执行/下载）
+  RewriteRule ^Sqlite/ - [F,L]
+
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico)

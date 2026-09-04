@@ -69,6 +69,10 @@ class ExtLoginController extends BaseController
         // 查找或创建用户（仅按用户名查找，不包含邮箱）
         $user = User::findByUsername($username);
         if (!$user) {
+            // 输入卫生：SSO 自动注册的用户名同样必须满足白名单，防注入/异常字符入库
+            if (!preg_match('/^[a-zA-Z0-9_\-\x{4e00}-\x{9fa5}]{2,30}$/u', $username)) {
+                return $this->error($response, 10101, '用户名只允许字母、数字、下划线、横线、中文，2-30个字符');
+            }
             $newUid = User::register($username, bin2hex(random_bytes(16)));
             if (!$newUid) {
                 return $this->error($response, 10101, '用户注册失败');
@@ -275,6 +279,10 @@ class ExtLoginController extends BaseController
             // 查找或创建用户
             $user = User::findByUsername($username);
             if (!$user) {
+                // 输入卫生：SSO 自动注册的用户名同样必须满足白名单，防注入/异常字符入库
+                if (!preg_match('/^[a-zA-Z0-9_\-\x{4e00}-\x{9fa5}]{2,30}$/u', $username)) {
+                    return $this->error($response, 10101, '用户名只允许字母、数字、下划线、横线、中文，2-30个字符');
+                }
                 $randomPassword = bin2hex(random_bytes(24));
                 $newUid = User::register($username, $randomPassword);
                 if (!$newUid) {
@@ -373,6 +381,10 @@ class ExtLoginController extends BaseController
         // 查找或创建用户
         $user = User::findByUsername($userName);
         if (!$user) {
+            // 输入卫生：SSO 自动注册的用户名同样必须满足白名单，防注入/异常字符入库
+            if (!preg_match('/^[a-zA-Z0-9_\-\x{4e00}-\x{9fa5}]{2,30}$/u', $userName)) {
+                return $this->error($response, 10101, '用户名只允许字母、数字、下划线、横线、中文，2-30个字符');
+            }
             $newUid = User::register($userName, md5($userName . time() . rand()));
             if (!$newUid) {
                 return $this->error($response, 10101, '用户注册失败');

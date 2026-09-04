@@ -27,6 +27,10 @@ class PageFeedbackController extends BaseController
 
         $pageId = $this->getParam($request, 'page_id', 0);
         $clientId = $this->getParam($request, 'client_id', '');
+        // 输入卫生：client_id 只允许十六进制/连字符，防任意字符串入库
+        if (!preg_match('/^[a-f0-9\-]{8,64}$/i', $clientId)) {
+            $clientId = '';
+        }
 
         if ($pageId <= 0) {
             return $this->error($response, 10100, '缺少page_id参数');
@@ -105,6 +109,10 @@ class PageFeedbackController extends BaseController
         $pageId = $this->getParam($request, 'page_id', 0);
         $feedbackType = $this->getParam($request, 'feedback_type', 0);
         $clientId = $this->getParam($request, 'client_id', '');
+        // 输入卫生：client_id 只允许十六进制/连字符，防任意字符串入库
+        if (!preg_match('/^[a-f0-9\-]{8,64}$/i', $clientId)) {
+            $clientId = '';
+        }
 
         if ($pageId <= 0) {
             return $this->error($response, 10100, '缺少page_id参数');
